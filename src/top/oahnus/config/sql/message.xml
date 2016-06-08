@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Message">
+  <resultMap type="top.oahnus.Bean.Message" id="MessageList">
+    <id column="ID" jdbcType="INTEGER" property="id"/>
+    <result column="COMMAND" jdbcType="VARCHAR" property="command"/>
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
+    <result column="CONTENT" jdbcType="VARCHAR" property="content"/>
+  </resultMap>
+
+  <!-- 检索 -->
+  <select id="queryMessageList" resultMap="MessageList">
+    SELECT ID,COMMAND,DESCRIPTION,CONTENT FROM message WHERE 1=1
+    <if test="command!=null and !&quot;&quot;.equals(command.trim())">AND COMMAND = #{command}</if>
+    <if test="description!=null and !&quot;&quot;.equals(description.trim())">AND DESCRIPTION LIKE '%' #{description} '%'</if>
+  </select>
+
+  <!-- 单条删除 -->
+  <delete id="deleteOne" parameterType="int">
+    DELETE FROM message WHERE ID = #{_parameter}
+  </delete>
+
+  <!-- 批量删除 -->
+  <!-- item 存放具体的id，#{item}去引用这个id，不断循环 -->
+  <delete id="deleteBatch" parameterType="java.util.List">
+    DELETE FROM message WHERE ID IN (
+      <foreach collection="list" item="item" separator=",">
+        #{item}
+      </foreach>
+    )
+  </delete>
+
+  <insert id="insertData" parameterType="java.util.List">
+    INSERT INTO message VALUES (NULL,
+      <foreach collection="list" item="item" separator=",">
+        #{item}
+      </foreach>
+    )
+  </insert>
+
+
+  <!--2016-6-6 修改-->
+  <update id="updateData" parameterType="top.oahnus.Bean.Message">
+    UPDATE message SET description = #{description}, content = #{content} WHERE id = #{id}
+  </update>
+</mapper>
