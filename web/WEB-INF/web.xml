@@ -36,17 +36,6 @@
         <url-pattern>/servlet/deleteBatch</url-pattern>
     </servlet-mapping>
 
-    <!-- 添加数据页面跳转 -->
-    <servlet>
-        <servlet-name>ForwardServlet</servlet-name>
-        <servlet-class>top.oahnus.servlet.ForwardServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>ForwardServlet</servlet-name>
-        <url-pattern>/servlet/forward</url-pattern>
-    </servlet-mapping>
-
     <!-- 添加数据 -->
     <servlet>
         <servlet-name>AddDataServlet</servlet-name>
