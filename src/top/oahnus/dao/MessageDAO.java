@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jackstrom on 2016/5/22.
+ * Created by oahnus on 2016/5/22.
  */
 
 //和message表的数据库交互
@@ -25,6 +25,11 @@ public class MessageDAO {
             sqlSession = dbAccess.getSqlSession();
             //通过sqlsession增加单条记录
             sqlSession.insert("Message.insertData",paramList);
+
+            //改为接口式编程
+            IMessage iMessage = sqlSession.getMapper(IMessage.class);
+            iMessage.insertData(paramList);
+
             //mybatis的增删改是默认不提交事务的，需要手动提交
             sqlSession.commit();
         } catch (IOException e) {
@@ -45,7 +50,16 @@ public class MessageDAO {
             message.setCommand(command);
             message.setDescription(description);
             //通过sqlSession执行SQL语句,传入message
-            messages = sqlSession.selectList("Message.queryMessageList",message);
+//            messages = sqlSession.selectList("Message.queryMessageList",message);
+
+            //使用接口式编程方法，通过创建的IMessage接口来调用SQL语句
+            //通过sqlSession获取接口,此时这个接口不是普通的接口，而是可以直接调用的接口
+            IMessage iMessage = sqlSession.getMapper(IMessage.class);
+            //通过接口取调用查询方法
+            messages = iMessage.queryMessageList(message);
+            //接口式编程，规范访问配置文件的方式，可以与Spring整合
+            // 与Spring整合后，Dao层和db层会被去掉，只保留与配置文件交互的接口
+            // 接口就充当了DAO层
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -67,7 +81,11 @@ public class MessageDAO {
         try {
             sqlSession = dbAccess.getSqlSession();
             //通过sqlsession删除单条记录
-            sqlSession.delete("Message.deleteOne",id);
+//            sqlSession.delete("Message.deleteOne",id);
+
+            //改为接口式编程
+            IMessage iMessage = sqlSession.getMapper(IMessage.class);
+            iMessage.deleteOne(id);
             //mybatis的增删改是默认不提交事务的，需要手动提交
             sqlSession.commit();
         } catch (IOException e) {
@@ -85,7 +103,11 @@ public class MessageDAO {
         try {
             sqlSession = dbAccess.getSqlSession();
             //通过sqlsession删除多条记录
-            sqlSession.delete("Message.deleteBatch",ids);
+//            sqlSession.delete("Message.deleteBatch",ids);
+            //使用接口式编程
+            IMessage iMessage = sqlSession.getMapper(IMessage.class);
+            iMessage.deleteBatch(ids);
+
             //mybatis的增删改是默认不提交事务的，需要手动提交
             sqlSession.commit();
         } catch (IOException e) {
@@ -101,7 +123,12 @@ public class MessageDAO {
         try{
             sqlSession = dbAccess.getSqlSession();
             //通过sqlsession修改数据
-            sqlSession.update("Message.updateData", message);
+//            sqlSession.update("Message.updateData", message);
+
+            //使用接口式编程
+            IMessage iMessage = sqlSession.getMapper(IMessage.class);
+            iMessage.updateData(message);
+
             //提交数据
             sqlSession.commit();
         } catch (IOException e) {

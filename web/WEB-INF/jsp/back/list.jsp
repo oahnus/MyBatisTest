@@ -62,7 +62,7 @@
 							<td>
 								<!-- <%=basePath%>/servlet/UpdateData.action?id=${message.id} -->
 								<a href="javascript:updateData(${message.id}, '<%=updatePath %>')">修改</a>&nbsp;&nbsp;&nbsp;
-								<a href="<%=basePath%>/servlet/deleteOne?id=${message}">删除</a>
+								<a href="<%=basePath%>/servlet/deleteOne?id=${message.id}">删除</a>
 							</td>
 						</tr>
 						<% totalData++; %>

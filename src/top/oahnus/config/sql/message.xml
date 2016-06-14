@@ -2,7 +2,8 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="Message">
+<!-- 用包名接口名作namespace的名称 -->
+<mapper namespace="top.oahnus.dao.IMessage">
   <resultMap type="top.oahnus.Bean.Message" id="MessageList">
     <id column="ID" jdbcType="INTEGER" property="id"/>
     <result column="COMMAND" jdbcType="VARCHAR" property="command"/>
@@ -11,7 +12,7 @@
   </resultMap>
 
   <!-- 检索 -->
-  <select id="queryMessageList" resultMap="MessageList">
+  <select id="queryMessageList" parameterType="top.oahnus.Bean.Message" resultMap="MessageList">
     SELECT ID,COMMAND,DESCRIPTION,CONTENT FROM message WHERE 1=1
     <if test="command!=null and !&quot;&quot;.equals(command.trim())">AND COMMAND = #{command}</if>
     <if test="description!=null and !&quot;&quot;.equals(description.trim())">AND DESCRIPTION LIKE '%' #{description} '%'</if>

@@ -16,15 +16,13 @@ public class MaintainService {
         messageDAO.addData(params);
     }
 
-    public void deleteOne(String id){
+    public void deleteOne(int id){
 
 //        System.out.println(id);
-        //判断id是否为空
-        if(id!=null&&!id.trim().equals("")) {
-            MessageDAO messageDAO = new MessageDAO();
-            //执行删除
-            messageDAO.deleteOne(Integer.valueOf(id));
-        }
+        MessageDAO messageDAO = new MessageDAO();
+        //执行删除
+        messageDAO.deleteOne(id);
+
     }
 
     public void deleteBatch(String[] ids){

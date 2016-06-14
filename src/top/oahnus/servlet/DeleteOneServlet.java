@@ -23,8 +23,7 @@ public class DeleteOneServlet extends HttpServlet {
         req.setCharacterEncoding("utf-8");
 
         //获取request中的参数id
-        String id = req.getParameter("id");
-System.out.println(id);
+        int id = Integer.parseInt(req.getParameter("id"));
 
         //实例化一个service
         MaintainService maintainService = new MaintainService();
