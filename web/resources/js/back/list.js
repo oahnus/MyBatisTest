@@ -66,3 +66,12 @@ function submitUpdate(id, path){
 function cancel(){
 	$("#edit").remove();
 }
+
+/**
+ * 修改当前页码，重新查询
+ * @param page
+ */
+function changePage(page){
+	$("#currentPage").val(page);
+	$("#mainForm").submit();
+}

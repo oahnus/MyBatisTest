@@ -7,6 +7,7 @@ import top.oahnus.db.DBAccess;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by oahnus on 2016/5/22.
@@ -24,7 +25,7 @@ public class MessageDAO {
         try {
             sqlSession = dbAccess.getSqlSession();
             //通过sqlsession增加单条记录
-            sqlSession.insert("Message.insertData",paramList);
+//            sqlSession.insert("Message.insertData",paramList);
 
             //改为接口式编程
             IMessage iMessage = sqlSession.getMapper(IMessage.class);
@@ -38,17 +39,38 @@ public class MessageDAO {
 
     }
 
+    //查找单条数据
+    public Message findMessage(Message param) {
+        DBAccess dbAccess = new DBAccess();
+        Message message = new Message();
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = dbAccess.getSqlSession();
+            IMessage iMessage = sqlSession.getMapper(IMessage.class);
+            //通过接口取调用查询方法
+            message = iMessage.findMessage(param);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+        }
+        return message;
+    }
+
+
     //查找数据，按指定参数将数据分类返回
-    public List<Message> queryMessageList(String command, String description){
+    public List<Message> queryMessageList(Map<String, Object> parameter){
         DBAccess dbAccess = new DBAccess();
         List<Message> messages = new ArrayList<>();
         SqlSession sqlSession = null;
         try {
             sqlSession = dbAccess.getSqlSession();
-            //将参数command，description封装到一个Message中，传入selectList
-            Message message = new Message();
-            message.setCommand(command);
-            message.setDescription(description);
+//            //将参数command，description封装到一个Message中，传入selectList
+//            Message message = new Message();
+//            message.setCommand(command);
+//            message.setDescription(description);
             //通过sqlSession执行SQL语句,传入message
 //            messages = sqlSession.selectList("Message.queryMessageList",message);
 
@@ -56,7 +78,7 @@ public class MessageDAO {
             //通过sqlSession获取接口,此时这个接口不是普通的接口，而是可以直接调用的接口
             IMessage iMessage = sqlSession.getMapper(IMessage.class);
             //通过接口取调用查询方法
-            messages = iMessage.queryMessageList(message);
+            messages = iMessage.queryMessageList(parameter);
             //接口式编程，规范访问配置文件的方式，可以与Spring整合
             // 与Spring整合后，Dao层和db层会被去掉，只保留与配置文件交互的接口
             // 接口就充当了DAO层
@@ -136,9 +158,26 @@ public class MessageDAO {
         }
     }
 
-    public static void main(String[] args){
-        MessageDAO messageDAO = new MessageDAO();
-        messageDAO.queryMessageList("新闻","");
+    /**
+     * 根据查询条件查询消息的条数
+     * @param message
+     * @return
+     */
+    public int count(Message message) {
+        DBAccess dbAccess = new DBAccess();
+        SqlSession sqlsession = null;
+        int retVal = 0;
+
+        try {
+            sqlsession = dbAccess.getSqlSession();
+            //通过调用接口执行SQL
+            IMessage iMessage = sqlsession.getMapper(IMessage.class);
+            retVal = iMessage.count(message);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return retVal;
     }
 
 

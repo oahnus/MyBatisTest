@@ -4,8 +4,8 @@
 //使用jquery的方式来代替js中的body.onload方法
 $(function(){
 	render();
-	var content = "客官，来啦，坐吧！";
-	content += "<br/>回复[帮助]可以查看所有可用的指令。";
+	var content = "客官，您好！";
+	content += "<br/>回复[帮助]可以查看更多内容";
 	// 添加公众号的开场白
 	appendDialog("talk_recordbox","公众号",content);
 	render();

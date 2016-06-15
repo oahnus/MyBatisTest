@@ -12,10 +12,29 @@
   </resultMap>
 
   <!-- 检索 -->
-  <select id="queryMessageList" parameterType="top.oahnus.Bean.Message" resultMap="MessageList">
+  <!-- 传入的参数是map，map中又有Message类和Page类，这是使用command事就要用key加.属性来访问 -->
+  <select id="queryMessageList" parameterType="java.util.Map" resultMap="MessageList">
     SELECT ID,COMMAND,DESCRIPTION,CONTENT FROM message WHERE 1=1
-    <if test="command!=null and !&quot;&quot;.equals(command.trim())">AND COMMAND = #{command}</if>
-    <if test="description!=null and !&quot;&quot;.equals(description.trim())">AND DESCRIPTION LIKE '%' #{description} '%'</if>
+    <if test="message.command!=null and !&quot;&quot;.equals(message.command.trim())">
+      AND COMMAND = #{message.command}
+    </if>
+    <if test="message.description!=null and !&quot;&quot;.equals(message.description.trim())">
+      AND DESCRIPTION LIKE '%' #{message.description} '%'
+    </if>
+    ORDER BY ID LIMIT #{page.startIndex} , #{page.indexNumber}
+  </select>
+
+  <!-- 获取所有语句的条数 -->
+  <select id="count" parameterType="top.oahnus.Bean.Message" resultType="int">
+    SELECT COUNT(*) FROM message
+    <where>
+      <if test="command!=null and !&quot;&quot;.equals(command.trim())">
+        AND command = #{command}
+      </if>
+      <if test="description!=null and !&quot;&quot;.equals(description.trim())">
+        AND description LIKE '%' #{description} '%'
+      </if>
+    </where>
   </select>
 
   <!-- 单条删除 -->
