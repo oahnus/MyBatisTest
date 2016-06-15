@@ -3,7 +3,6 @@
  */
 function deleteBatch(basePath) {
 	$("#mainForm").attr("action",basePath + "/servlet/deleteBatch");
-	console.log($("#mainForm").attr("action"))
 	$("#mainForm").submit();
 }
 
